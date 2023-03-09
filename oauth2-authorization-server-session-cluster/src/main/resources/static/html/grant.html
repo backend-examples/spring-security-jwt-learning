@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>授权</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<style>
+    html. body {
+        margin:  0;
+        padding: 0;
+    }
+
+    body {
+        background-color: #f6f8fa;
+        width: 100%;
+        min-height: 100vh;
+        text-align: center;
+    }
+
+    .container {
+        box-sizing: border-box;
+        width: 500px;
+        max-height: 600px;
+        padding: 50px 0;
+    }
+
+    .form-wrap {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 10px 20px;
+        border: #cccccc 1px solid;
+        border-radius: 10px;
+        text-align: start;
+    }
+
+    p {
+        margin: 0;
+    }
+
+    #submit-consent {
+        width: 45%;
+        float: right;
+        height: 40px;
+        font-size: 18px;
+        border-color: #cccccc;
+        margin-right: 3%;
+    }
+
+    #cancel-consent {
+        width: 45%;
+        height: 40px;
+        font-size: 18px;
+        color: black;
+        background-color: #cccccc;
+        border-color: #cccccc;
+        float: left;
+        margin-left: 3%;
+    }
+
+    .form-check-input {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+    }
+
+    .form-check-label {
+        line-height: 1.5;
+    }
+    .toast-wrap {
+        position: relative;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0);
+    }
+    .toast-position {
+        position: absolute;
+        top: 15vh;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgb(105, 105, 105);
+        color: #fff;
+        padding: 5px 10px;
+        z-index: 999;
+    }
+</style>
+<body>
+<div class="toast-wrap">
+    <div class="toast toast-position">
+        <span class="toast-body">请先勾选相关权限</span>
+    </div>
+</div>
+<div class="container">
+    <h5 style="text-align: center"><b th:text="${clientId}"></b>希望获得以下许可：</h5>
+    <div class="form-wrap">
+        <form name="consent_form" method="post" action="/author/oauth/authorize" onsubmit="return confirmConsent()">
+            <input type="hidden" name="user_oauth_approval" value="true">
+            <input type="hidden" name="client_id" th:value="${clientId}">
+            <input type="hidden" name="state" th:value="${state}">
+
+            <div th:each="item: ${scopes}" class="form-group form-check py-1" style="margin-left: 5%">
+                <input class="form-check-input"
+                       type="checkbox"
+                       th:name="'scope.'+${item.scope}"
+                       th:value="${item.value}"
+                       th:id="${item.scope}"
+                       th:checked="${item.value}">
+                <label class="form-check-label font-weight-bold" th:for="${item.scope}"
+                       th:text="${item.scope}=='profile'?(${item.description}+'('+${principalName}+')'):${item.description}"></label>
+            </div>
+            <hr style="width: 90%">
+            <p style="margin-left: 5%"><b th:text="${clientId}"></b>尚未安装在您有权访问的任何账户上。</p>
+            <hr style="width: 90%">
+            <div class="form-group pt-3" style="width: 100%;height: 80px;">
+                <button class="btn btn-primary btn-lg" type="submit" id="submit-consent">
+                    授权同意
+                </button>
+                <button class="btn btn-primary btn-lg" type="button" id="cancel-consent" onclick="cancelConsent();">
+                    取消
+                </button>
+            </div>
+            <div style="margin-top: 5px;width: 100%;height: 50px">
+                <p style="text-align: center;font-size: 14px">授权将重定向到</p>
+                <p style="text-align: center;font-size: 14px"><b th:text="${redirectUri}"></b></p>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script>
+    var scopes = document.getElementsByClassName("form-check-input");
+
+    function cancelConsent() {
+        document.consent_form.reset();
+
+        for (var i=0; i<scopes.length; i++) {
+            scopes[i].value = false
+            // scopes[i].checked = false
+        }
+        document.consent_form.submit();
+    }
+
+    function confirmConsent() {
+        var checked = []
+        for (var i=0; i<scopes.length; i++) {
+            if (!scopes[i].checked) {
+                checked.push(scopes[i])
+            }
+        }
+
+
+        if (checked.length < scopes.length) {
+
+            return true
+        }
+
+        if (checked.length >= scopes.length) {
+            $('.toast').toast('show')
+
+            return false
+        }
+    }
+</script>
+</html>

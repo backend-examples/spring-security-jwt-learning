@@ -1,0 +1,62 @@
+server:
+  port: 8001
+  servlet:
+    context-path: /author
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  redis:
+    database: 0 # Redis 数据库索引（默认为 0）
+    host: localhost # Redis 服务器地址
+    port: 6379 # Redis 服务器连接端口
+    # password: 没有不用写
+    lettuce:
+      # 连接池配置
+      pool:
+        # 连接池中的最小空闲连接，默认 0
+        min-idle: 0
+        # 连接池中的最大空闲连接，默认 8
+        max-idle: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制），默认 -1ms
+        max-wait: -1ms
+        # 连接池最大连接数（使用负值表示没有限制），默认 8
+        max-active: 8
+  datasource:
+    password: root
+    url: jdbc:mysql://localhost:3306/oauth2
+    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  thymeleaf:
+    prefix: classpath:/static/html
+    suffix: .html
+    cache: false
+
+mybatis:
+  mapper-locations: classpath*:/mapper/*.xml
+
+# 短信服务相关信息
+sms:
+  # 腾讯云账户密钥对 secretId
+  secretId: AKIDGTTFoBMJ3ufCVlxzqY6SZS6WjiVJwMYs
+  # 腾讯云账户密钥对 secretKey
+  secretKey: DHAqLdiaFj04vb4MVTH5pbJ5iAPRIySk
+  # SDK默认使用POST方法。
+  requestMethod: POST
+  # SDK的超时时间
+  connTimeout: 60
+  # 指定接入地域域名，默认就近地域接入域名为 sms.tencentcloudapi.com，也支持指定地域域名访问，例如广州地域的域名为 sms.ap-guangzhou.tencentcloudapi.com
+  endpoint: sms.tencentcloudapi.com
+  # SDK默认用TC3-HMAC-SHA256进行签名，非必要请不要修改这个字段
+  signMethod: HmacSHA256
+  # 地域信息，可以直接填写字符串ap-guangzhou，支持的地域列表参考 https://cloud.tencent.com/document/api/382/52071#.E5.9C.B0.E5.9F.9F.E5.88.97.E8.A1.A8
+  region: ap-guangzhou
+  # 短信应用ID，https://console.cloud.tencent.com/smsv2/app-manage
+  sdkAppId: 1400750936
+  # 短信签名内容: 使用 UTF-8 编码，必须填写已审核通过的签名，https://console.cloud.tencent.com/smsv2/csms-sign
+  signName: 小杖芒鞋公众号
+  # 模板 ID: 必须填写已审核通过的模板 ID，https://console.cloud.tencent.com/smsv2/csms-template
+  templateId: 1576839
+  # 模板参数，验证码失效时间
+  time: 5

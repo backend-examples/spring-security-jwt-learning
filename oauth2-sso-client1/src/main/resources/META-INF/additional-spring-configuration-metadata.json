@@ -1,0 +1,58 @@
+{
+  "properties": [
+    {
+      "name": "oauth2.client.client-id",
+      "type": "java.lang.String",
+      "description": "Description for oauth2.client.client-id."
+    },
+    {
+      "name": "oauth2.client.client-secret",
+      "type": "java.lang.String",
+      "description": "Description for oauth2.client.client-secret."
+    },
+    {
+      "name": "oauth2.client.user-authorization-uri",
+      "type": "java.lang.String",
+      "description": "Description for oauth2.client.user-authorization-uri."
+    },
+    {
+      "name": "oauth2.client.access-token-uri",
+      "type": "java.lang.String",
+      "description": "Description for oauth2.client.access-token-uri."
+    },
+    {
+      "name": "oauth2.client.pre-established-redirect-uri",
+      "type": "java.lang.String",
+      "description": "Description for oauth2.client.pre-established-redirect-uri."
+    },
+    {
+      "name": "oauth2.client.scope",
+      "type": "java.lang.String",
+      "description": "Description for oauth2.client.scope."
+    },
+    {
+      "name": "oauth2.client.use-current-uri",
+      "type": "java.lang.String",
+      "description": "Description for oauth2.client.use-current-uri."
+    },
+    {
+      "name": "oauth2.resource.user-info-uri",
+      "type": "java.lang.String",
+      "description": "Description for oauth2.resource.user-info-uri."
+    },
+    {
+      "name": "oauth2.resource.jwt.key-uri",
+      "type": "java.lang.String",
+      "description": "Description for oauth2.resource.jwt.key-uri."
+    },
+    {
+      "name": "oauth2.resource.jwt.key-value",
+      "type": "java.lang.String",
+      "description": "Description for oauth2.resource.jwt.key-value."
+    },
+    {
+      "name": "oauth2.client.check-token-uri",
+      "type": "java.lang.String",
+      "description": "Description for oauth2.client.check-token-uri."
+    }
+  ] }

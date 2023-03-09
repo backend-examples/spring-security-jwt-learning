@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.security.mapper.RoleUserMapper">
+    <insert id="insertRoleUser" parameterType="com.security.pojo.RoleUser">
+        <selectKey keyProperty="roleId" resultType="integer" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into role_user values (#{roleId}, #{userId})
+    </insert>
+
+    <sql id="selectAllProperties">
+        select * from role_user
+    </sql>
+    <select id="selectRoleUserByUserId" parameterType="integer" resultType="com.security.pojo.RoleUser">
+        <include refid="selectAllProperties"></include>
+        <where>
+            <if test="userId != null">
+                userId = #{userId}
+            </if>
+        </where>
+    </select>
+</mapper>

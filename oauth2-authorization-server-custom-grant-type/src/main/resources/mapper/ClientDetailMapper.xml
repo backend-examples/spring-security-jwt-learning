@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.security.mapper.ClientDetailMapper">
+    <insert id="insertClientDetail" parameterType="com.security.pojo.ClientDetail">
+        insert into oauth_client_details
+            values (#{clientId}, #{resourceIds}, #{clientSecret}, #{plainClientSecret}, #{scope},
+        #{authorizedGrantTypes}, #{webServerRedirectUri}, #{authorities}, #{accessTokenValidity},
+        #{refreshTokenValidity}, #{additionalInformation}, #{autoApprove})
+    </insert>
+
+    <sql id="selectAllProperties">
+        select * from oauth_client_details
+    </sql>
+    <select id="selectClientDetailByClientId" parameterType="string" resultType="com.security.pojo.ClientDetail">
+        <include refid="selectAllProperties"></include>
+        <where>
+            <if test="clientId != null">
+                client_id = #{clientId}
+            </if>
+        </where>
+    </select>
+</mapper>
