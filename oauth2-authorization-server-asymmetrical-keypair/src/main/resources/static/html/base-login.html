@@ -92,6 +92,14 @@
                     a.click()
                 }
             },
+            // ajax发起的请求，会导致modelAndView无法跳转到新的页面
+            // 所以直接在登录页处理登录失败的情况
+            error: (data) => {
+                console.log('登录失败：', data)
+                const tip = document.getElementById('message')
+                tip.style.display = 'block'
+                tip.innerText = '用户名或密码错误'
+            },
             dataType: "json"
         })
     }
